@@ -122,7 +122,7 @@ public final class FoliageGhostRenderer {
     /** Preserve the original foliage RGB/tint/light; change only the alpha byte. */
     private static void setAlpha(BufferBuilder buffer, int startVertex, int endVertex, int alpha) {
         ByteBuffer bytes = buffer.getByteBuffer();
-        int stride = buffer.getVertexFormat().getNextOffset();
+        int stride = buffer.getVertexFormat().getIntegerSize() * Integer.BYTES;
         int color = buffer.getVertexFormat().getColorOffset();
         int alphaOffset = ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN ? 3 : 0;
         for (int vertex = startVertex; vertex < endVertex; vertex++) {
