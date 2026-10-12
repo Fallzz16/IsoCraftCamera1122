@@ -1,0 +1,10 @@
+key.categories.isocraftcamera=IsoCraft Camera
+key.isocraftcamera.toggle=Toggle isometric camera
+key.isocraftcamera.zoom_in=Zoom in
+key.isocraftcamera.zoom_out=Zoom out
+key.isocraftcamera.rotate_left=Rotate camera left
+key.isocraftcamera.rotate_right=Rotate camera right
+key.isocraftcamera.projection=Toggle projection
+key.isocraftcamera.foliage=Toggle translucent foliage
+key.isocraftcamera.cursor=Toggle free cursor
+key.isocraftcamera.look=Hold to orbit camera with mouse

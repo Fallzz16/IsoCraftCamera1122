@@ -1,0 +1,10 @@
+key.categories.isocraftcamera=IsoCraft Camera
+key.isocraftcamera.toggle=Alternar camera isometrica
+key.isocraftcamera.zoom_in=Aproximar camera
+key.isocraftcamera.zoom_out=Afastar camera
+key.isocraftcamera.rotate_left=Girar camera a esquerda
+key.isocraftcamera.rotate_right=Girar camera a direita
+key.isocraftcamera.projection=Alternar projecao
+key.isocraftcamera.foliage=Alternar folhas invisiveis
+key.isocraftcamera.cursor=Alternar cursor livre
+key.isocraftcamera.look=Segurar para girar camera com o mouse

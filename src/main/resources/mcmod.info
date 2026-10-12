@@ -1,0 +1,12 @@
+[
+  {
+    "modid": "isocraftcamera",
+    "name": "IsoCraft Camera",
+    "description": "Camera isometrica/ortografica cliente para Minecraft Forge 1.12.2.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "authorList": ["IsoCraft"],
+    "credits": "Port da matematica do prototipo Fabric do projeto IsoCraft Camera",
+    "dependencies": []
+  }
+]
