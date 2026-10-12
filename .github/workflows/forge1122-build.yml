@@ -1,0 +1,104 @@
+name: IsoCraft Camera 1.12.2 - Build e QA
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'build.gradle'
+      - 'settings.gradle'
+      - 'gradle.properties'
+      - 'TEST-MATH.sh'
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Compilar Forge 1.12.2 (Java 8 / Gradle 4.9)
+    runs-on: ubuntu-22.04
+    timeout-minutes: 35
+    steps:
+      - name: Obter codigo-fonte
+        uses: actions/checkout@v7
+
+      - name: Configurar JDK 8
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '8'
+
+      - name: Verificar ferramentas
+        shell: bash
+        run: |
+          set -euo pipefail
+          java -version
+          javac -version
+          test "$(javac -version 2>&1 | cut -d' ' -f2 | cut -d. -f1)" = "1" || { echo 'JDK 8 nao encontrado'; exit 1; }
+
+      - name: Executar testes matematicos independentes
+        shell: bash
+        run: bash TEST-MATH.sh
+
+      - name: Instalar Gradle 4.9 e verificar SHA-256
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/isocraft-gradle"
+          cd "$RUNNER_TEMP/isocraft-gradle"
+          echo 'Baixando Gradle 4.9 oficial...'
+          if ! curl --fail --location --retry 3 --retry-delay 3 --connect-timeout 30 \
+            'https://downloads.gradle.org/distributions/gradle-4.9-bin.zip' -o gradle-4.9-bin.zip; then
+            curl --fail --location --retry 3 --retry-delay 3 --connect-timeout 30 \
+              'https://services.gradle.org/distributions/gradle-4.9-bin.zip' -o gradle-4.9-bin.zip
+          fi
+          echo 'e66e69dce8173dd2004b39ba93586a184628bc6c28461bc771d6835f7f9b0d28  gradle-4.9-bin.zip' | sha256sum --check --status || {
+            echo 'ERRO: hash SHA-256 nao confere. Abandonando o download.' >&2
+            exit 1
+          }
+          unzip -q gradle-4.9-bin.zip
+          echo "$RUNNER_TEMP/isocraft-gradle/gradle-4.9/bin" >> "$GITHUB_PATH"
+
+      - name: Compilar o projeto com Forge real
+        shell: bash
+        run: |
+          set -euo pipefail
+          gradle --version
+          gradle --no-daemon --console=plain clean build 2>&1 | tee BUILD_LOG_CI.txt
+
+      - name: Verificar estrutura e hash do JAR
+        shell: bash
+        run: |
+          set -euo pipefail
+          JAR='build/libs/isocraft-camera-forge1122-0.3.0.jar'
+          test -s "$JAR"
+          jar tf "$JAR" > JAR_CONTENTS_CI.txt
+          grep -Fxq 'mcmod.info' JAR_CONTENTS_CI.txt
+          grep -Fxq 'dev/isocraft/camera/IsoCraftCamera.class' JAR_CONTENTS_CI.txt
+          grep -Fxq 'dev/isocraft/camera/CameraEvents.class' JAR_CONTENTS_CI.txt
+          sha256sum "$JAR" | tee JAR_SHA256_CI.txt
+          echo "Arquivo validado: $JAR" >> "$GITHUB_STEP_SUMMARY"
+          echo 'A jogabilidade ainda precisa ser testada no Minecraft.' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Publicar JAR compilado
+        uses: actions/upload-artifact@v7
+        with:
+          name: IsoCraft-Camera-Forge1122-v0.3.0
+          path: build/libs/isocraft-camera-forge1122-0.3.0.jar
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publicar logs de diagnostico
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: IsoCraft-CI-Logs-${{ github.run_number }}
+          path: |
+            BUILD_LOG_CI.txt
+            JAR_CONTENTS_CI.txt
+            JAR_SHA256_CI.txt
+          if-no-files-found: ignore
+          retention-days: 14
