@@ -1,33 +1,47 @@
 # IsoCraft Camera — Minecraft Forge 1.12.2
 
-Mod experimental de câmera isométrica com recursos inspirados em Project Zomboid.
+Mod client-side de câmera isométrica com recursos inspirados em **Project Zomboid**.
 
-**Versão:** v0.3.0 · **Minecraft:** 1.12.2 · **Forge para compilação:** 14.23.5.2847 · **Java:** 8.
+**Versão:** v0.3.0 (experimental) · **Minecraft:** 1.12.2 · **Forge para compilação:** 14.23.5.2847 · **Java:** 8.
 
 ## Recursos
 
-- Câmera isométrica com F8, zoom e rotação, sem necessidade de teclado numérico.
-- X + arrastar o mouse para olhar em outras direções.
-- Cursor livre, Steve acompanhando visualmente o cursor e folhas semitransparentes.
-- Correções experimentais para oscilação de zoom e desaparecimento de chunks.
+- Câmera isométrica alternável com **F8**.
+- Zoom com **F6 / F7**, rotação com **J / L** e projeção com **K** (sem numpad).
+- Segurar **X** e arrastar o mouse para olhar em outras direções.
+- Cursor livre ativável por **V**, com orientação visual do Steve para o cursor.
+- Folhas semitransparentes próximas ao jogador, ativáveis por **H**.
+- Mitigações experimentais para zoom oscilante e chunks desaparecendo.
 
-## Status da importação do projeto
+## Compilação automática (GitHub Actions)
 
-O workflow de compilação está publicado em `.github/workflows/forge1122-build.yml`. **Os arquivos-fonte ainda precisam ser enviados** à raiz deste repositório para executar o primeiro build.
+O código-fonte está em `src/`; os testes matemáticos independentes estão em `tests/`.
+O workflow `.github/workflows/forge1122-build.yml` executa testes e compila usando
+**Temurin JDK 8**, **Gradle 4.9** e as dependências reais do **Forge 1.12.2**.
 
-Como enviar pelo navegador:
+**Primeira compilação aprovada:** [GitHub Actions — execução #2](https://github.com/Fallzz16/IsoCraftCamera1122/actions/runs/38324966271).
 
-1. Baixe o pacote `IsoCraftCamera_1.12.2_v0.3.0_ARQUIVOS_PARA_UPLOAD_GITHUB.zip` fornecido no ChatGPT.
-2. Extraia o ZIP no computador.
-3. No GitHub, vá a **Add file → Upload files** e arraste **o conteúdo extraído**, incluindo as pastas `src`, `tests` e arquivos `build.gradle`, `gradle.properties`, `settings.gradle`, `TEST-MATH.sh`. Não envie o ZIP como um único arquivo.
-4. Confirme **Commit changes** na branch `main`.
+Para baixar: abra essa execução, vá à seção **Artifacts** e escolha
+`IsoCraft-Camera-Forge1122-v0.3.0`. Extraia o ZIP do artefato para obter
+`isocraft-camera-forge1122-0.3.0.jar`.
 
-## Compilação automática
+Para futuras compilações, alterações nos arquivos Java, nos testes ou na
+configuração Gradle iniciam o workflow automaticamente. Você também pode
+executá-lo manualmente pela aba **Actions**.
 
-O envio dos arquivos-fonte inicia o workflow **Actions → IsoCraft Camera 1.12.2 - Build e QA**. Ele instala JDK 8 e Gradle 4.9, executa testes matemáticos, compila com Forge real e confere entradas essenciais do JAR.
+## Instalação
 
-Quando o workflow ficar verde, abra a execução e baixe o artefato `IsoCraft-Camera-Forge1122-v0.3.0`. Dentro dele estará `isocraft-camera-forge1122-0.3.0.jar`.
+1. Use **Minecraft 1.12.2 com Forge** (não Fabric e não Forge 1.21.x).
+2. Coloque somente o `.jar` compilado na pasta `mods` do perfil Minecraft 1.12.2.
+3. Inicie o jogo e confirme se o IsoCraft Camera aparece em **Mods**.
+4. Teste preferencialmente em mundo Criativo novo, sem outros mods.
 
-Uma compilação bem-sucedida ainda não comprova ausência de bugs visuais; câmera, cursor, folhagem e chunks precisam de teste dentro do Minecraft.
+## Status e limitações
 
-**Importante:** este repositório é separado do projeto VeilChapter1122.
+A execução #2 passou pela compilação com o Forge real, pela verificação das
+classes e do `mcmod.info`, e publicou o artefato `.jar`.
+**Isso não é um teste de jogabilidade:** o renderizador de folhas, o cursor,
+a rotação livre e os chunks ainda precisam de validação dentro do jogo.
+Esta continua sendo uma versão **experimental**.
+
+Projeto independente do VeilChapter1122.
